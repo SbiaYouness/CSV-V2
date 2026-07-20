@@ -1,0 +1,36 @@
+{
+  "parser_version": "v28",
+  "status": "complete",
+  "metric_count": 3,
+  "metrics": [
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 0.59,
+      "Source PDF": "page 11 (table)"
+    },
+    {
+      "Indicateur": "RWA Crédit",
+      "Valeur PDF (EBA)": 3000000.0,
+      "Source PDF": "page 11 (table)"
+    },
+    {
+      "Indicateur": "RWA CCR",
+      "Valeur PDF (EBA)": 4000000.0,
+      "Source PDF": "page 11 (table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "96950041VJ1QP0B69503.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260512153705013.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      3,
+      4,
+      11
+    ],
+    "ov1_pages": [
+      4,
+      6,
+      11
+    ]
+  }
+}

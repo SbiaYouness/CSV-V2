@@ -1,0 +1,170 @@
+Found 17 zip files in /app/applet/FichiersClaude/pdfs
+
+Excel: 28 bank columns, 14 indicator rows
+First few indicator labels from Excel: ['CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR']
+====================================================================================================
+Column: 'Groupe BPCE'                                 -> output_name='Groupe BPCE'
+   LEI resolved:   'FR9695005MSX1OYEMGDF'
+   Zip matched:    FR9695005MSX1OYEMGDF.CON_FR_PILLAR3010000_P3REMDISDOCS_2025-12-31_20260520100000003.zip
+   Metrics found:  0 indicators -> []
+   Excel indicator labels with a numeric value: 14
+   Of those, how many indicator LABELS match a PDF metric key: 0
+   Indicator labels with a value but NO matching PDF key (first 5): ['CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR']
+----------------------------------------------------------------------------------------------------
+Column: 'AGENCE FRANCE LOCALE - SOCIETE'              -> output_name='Agence France Locale'
+   LEI resolved:   '969500QDXBKBTYXRS977'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500QDXBKBTYXRS977) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Axa banque'                                  -> output_name='Axa banque'
+   LEI resolved:   '969500FFKE8NKHXUTZ47'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500FFKE8NKHXUTZ47) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'BANQUE POPULAIRE AUVERGNE RHON'              -> output_name='Banque Populaire Auvergne Rhône Alpes'
+   LEI resolved:   '969500JM7VIGQIPZOL49'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500JM7VIGQIPZOL49) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'BNP Paribas'                                 -> output_name='BNP Paribas'
+   LEI resolved:   'R0MUWSFPU8MPRO8K5P83'
+   Zip matched:    R0MUWSFPU8MPRO8K5P83.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260402102130123.zip
+   Metrics found:  14 indicators -> ['CET1 Capital', 'Tier 1 Capital', 'Total Capital', 'RWA Total', 'CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR', 'NSFR', 'RWA Crédit', 'RWA CCR', 'RWA Marché', 'RWA Opérationnel']
+   Excel indicator labels with a numeric value: 13
+   Of those, how many indicator LABELS match a PDF metric key: 14
+----------------------------------------------------------------------------------------------------
+Column: 'BNP Paribas Personal Finance'                -> output_name='BNP Paribas Personal Finance'
+   LEI resolved:   'R0MUWSFPU8MPRO8K5P83'
+   Zip matched:    R0MUWSFPU8MPRO8K5P83.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260402102130123.zip
+   Metrics found:  14 indicators -> ['CET1 Capital', 'Tier 1 Capital', 'Total Capital', 'RWA Total', 'CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR', 'NSFR', 'RWA Crédit', 'RWA CCR', 'RWA Marché', 'RWA Opérationnel']
+   Excel indicator labels with a numeric value: 0
+   Of those, how many indicator LABELS match a PDF metric key: 14
+----------------------------------------------------------------------------------------------------
+Column: 'BRED - Banque populaire'                     -> output_name='BRED - Banque populaire'
+   LEI resolved:   'NICH5Q04ADUV9SN3Q390'
+   Zip matched:    None
+   Status: (B) LEI resolved (NICH5Q04ADUV9SN3Q390) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Banque populaire Alsace Lorrai'              -> output_name='Banque populaire Alsace Lorraine Champagne'
+   LEI resolved:   '969500EVOBAGHKZEXA33'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500EVOBAGHKZEXA33) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Banque populaire Grand Ouest'                -> output_name='Banque populaire Grand Ouest'
+   LEI resolved:   '969500JNCCPQSAQO9K33'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500JNCCPQSAQO9K33) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Banque populaire Rives de Pari'              -> output_name='Banque populaire Rives de Paris'
+   LEI resolved:   '969500W8SBCXNX1DG443'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500W8SBCXNX1DG443) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'BofA Securities Europe'                      -> output_name='BofA Securities Europe'
+   LEI resolved:   'R4DHLH5KX7NMDO6YTPM4'
+   Zip matched:    None
+   Status: (B) LEI resolved (R4DHLH5KX7NMDO6YTPM4) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Bpifrance'                                   -> output_name='Bpifrance'
+   LEI resolved:   '969500STN7T9MRUMJ267'
+   Zip matched:    969500STN7T9MRUMJ267.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-06-30_20260403100532000.zip
+   Metrics found:  10 indicators -> ['CET1 Capital', 'Tier 1 Capital', 'Total Capital', 'RWA Total', 'CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR', 'NSFR']
+   Excel indicator labels with a numeric value: 14
+   Of those, how many indicator LABELS match a PDF metric key: 10
+   Indicator labels with a value but NO matching PDF key (first 5): ['RWA Crédit', 'RWA CCR', 'RWA Marché', 'RWA Opérationnel']
+----------------------------------------------------------------------------------------------------
+Column: 'CAISSE D EPARGNE ET DE PREVOYA'              -> output_name="Caisse d'épargne Aquitaine Poitou Charente"
+   LEI resolved:   '969500JJWO4PQG0R1C58'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500JJWO4PQG0R1C58) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'CIC'                                         -> output_name='CIC'
+   LEI resolved:   '96950066NYMAFZAJFW89'
+   Zip matched:    None
+   Status: (B) LEI resolved (96950066NYMAFZAJFW89) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Caisse d Epargne CEPAC'                      -> output_name="Caisse d'Epargne CEPAC"
+   LEI resolved:   '969500TU5ZMYBIWP0R51'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500TU5ZMYBIWP0R51) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Caisse d épargne et de prévoya'              -> output_name="Caisse d'épargne Aquitaine Poitou Charente"
+   LEI resolved:   '969500JJWO4PQG0R1C58'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500JJWO4PQG0R1C58) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Caisse d épargne et de prévoya.1'            -> output_name="Caisse d'épargne Bretagne-Pays de Loire"
+   LEI resolved:   '969500SJXM8MW32ZVG75'
+   Zip matched:    969500SJXM8MW32ZVG75.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-12-31_20260424100000002.zip
+   Metrics found:  4 indicators -> ['RWA Total', 'RWA Crédit', 'RWA CCR', 'RWA Opérationnel']
+   Excel indicator labels with a numeric value: 13
+   Of those, how many indicator LABELS match a PDF metric key: 4
+   Indicator labels with a value but NO matching PDF key (first 5): ['CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR']
+----------------------------------------------------------------------------------------------------
+Column: 'Caisse d épargne et de prévoya.2'            -> output_name="Caisse d'épargne Ile-de-France"
+   LEI resolved:   '969500W34S6NCZWYBV47'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500W34S6NCZWYBV47) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Caisse fédérale de crédit mutu'              -> output_name='Caisse fédérale de crédit mutuel'
+   LEI resolved:   ''
+   Zip matched:    None
+   Status: (A) NO LEI RESOLVED for this column name
+----------------------------------------------------------------------------------------------------
+Column: 'Caisse régionale de crédit agr'              -> output_name='Caisse régionale de crédit agricole (2)'
+   LEI resolved:   '9695001XNQTXW5QYMM16'
+   Zip matched:    None
+   Status: (B) LEI resolved (9695001XNQTXW5QYMM16) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Caisse régionale de crédit agr.1'            -> output_name='Caisse régionale de crédit agricole (1)'
+   LEI resolved:   '969500LP6CBLEFQ23P13'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500LP6CBLEFQ23P13) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'Confédération Nationale du Cré'              -> output_name='Confédération Nationale du Cré'
+   LEI resolved:   ''
+   Zip matched:    None
+   Status: (A) NO LEI RESOLVED for this column name
+----------------------------------------------------------------------------------------------------
+Column: 'Credit Foncier'                              -> output_name='Credit Foncier de France'
+   LEI resolved:   '969500EYG6U339D3TI84'
+   Zip matched:    969500EYG6U339D3TI84.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-12-31_20260323100000002.zip
+   Metrics found:  12 indicators -> ['CET1 Capital', 'Tier 1 Capital', 'Total Capital', 'RWA Total', 'CET1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR', 'NSFR', 'RWA Crédit', 'RWA CCR', 'RWA Opérationnel']
+   Excel indicator labels with a numeric value: 11
+   Of those, how many indicator LABELS match a PDF metric key: 12
+   Indicator labels with a value but NO matching PDF key (first 5): ['Tier 1 Ratio']
+----------------------------------------------------------------------------------------------------
+Column: 'Crédit mutuel Arkéa'                         -> output_name='Crédit mutuel Arkéa'
+   LEI resolved:   '96950041VJ1QP0B69503'
+   Zip matched:    96950041VJ1QP0B69503.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260512153705013.zip
+   Metrics found:  3 indicators -> ['LCR', 'RWA Crédit', 'RWA CCR']
+   Excel indicator labels with a numeric value: 14
+   Of those, how many indicator LABELS match a PDF metric key: 3
+   Indicator labels with a value but NO matching PDF key (first 5): ['CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'NSFR']
+----------------------------------------------------------------------------------------------------
+Column: 'Natixis'                                     -> output_name='Natixis'
+   LEI resolved:   'KX1WK48MPD4Y2NCUIZ63'
+   Zip matched:    None
+   Status: (B) LEI resolved (KX1WK48MPD4Y2NCUIZ63) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'RCI Banque'                                  -> output_name='RCI Banque'
+   LEI resolved:   '969500V535YV4YSOVQ94'
+   Zip matched:    None
+   Status: (B) LEI resolved (969500V535YV4YSOVQ94) but NO ZIP found with that LEI
+----------------------------------------------------------------------------------------------------
+Column: 'SFIL S A'                                    -> output_name='SFIL S.A.'
+   LEI resolved:   '549300HFEHJOXGE4ZE63'
+   Zip matched:    549300HFEHJOXGE4ZE63.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260126115401003.zip
+   Metrics found:  9 indicators -> ['CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR', 'NSFR', 'RWA Crédit', 'RWA CCR', 'RWA Total']
+   Excel indicator labels with a numeric value: 13
+   Of those, how many indicator LABELS match a PDF metric key: 9
+   Indicator labels with a value but NO matching PDF key (first 5): ['CET1 Capital', 'Tier 1 Capital', 'Total Capital', 'RWA Opérationnel']
+----------------------------------------------------------------------------------------------------
+Column: 'Société générale S A'                        -> output_name='Société générale S.A.'
+   LEI resolved:   'O2RNE8IBXP4R0TD8PU41'
+   Zip matched:    O2RNE8IBXP4R0TD8PU41.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260428083647122.zip
+   Metrics found:  13 indicators -> ['CET1 Capital', 'Tier 1 Capital', 'Total Capital', 'RWA Total', 'CET1 Ratio', 'Tier 1 Ratio', 'Total Capital Ratio', 'Leverage Ratio', 'LCR', 'NSFR', 'RWA CCR', 'RWA Marché', 'RWA Opérationnel']
+   Excel indicator labels with a numeric value: 14
+   Of those, how many indicator LABELS match a PDF metric key: 13
+   Indicator labels with a value but NO matching PDF key (first 5): ['RWA Crédit']
+----------------------------------------------------------------------------------------------------

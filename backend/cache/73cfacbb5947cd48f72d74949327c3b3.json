@@ -1,0 +1,79 @@
+{
+  "parser_version": "v30",
+  "status": "complete",
+  "metric_count": 12,
+  "metrics": [
+    {
+      "Indicateur": "CET1 Capital",
+      "Valeur PDF (EBA)": 8804457000.0,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "Tier 1 Capital",
+      "Valeur PDF (EBA)": 8804457000.0,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "CET1 Ratio",
+      "Valeur PDF (EBA)": 0.18,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "Tier 1 Ratio",
+      "Valeur PDF (EBA)": 0.18,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "Total Capital Ratio",
+      "Valeur PDF (EBA)": 0.214,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.065,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.47,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.18,
+      "Source PDF": "page 3 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Crédit",
+      "Valeur PDF (EBA)": 43286366000.0,
+      "Source PDF": "page 4 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA CCR",
+      "Valeur PDF (EBA)": 640569000000.0,
+      "Source PDF": "page 4 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Opérationnel",
+      "Valeur PDF (EBA)": 4032846000000.0,
+      "Source PDF": "page 4 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Total",
+      "Valeur PDF (EBA)": 48976751000.0,
+      "Source PDF": "page 4 (OCR table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "96950041VJ1QP0B69503.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260512153705013.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      3,
+      4
+    ],
+    "ov1_pages": [
+      4,
+      6
+    ]
+  }
+}

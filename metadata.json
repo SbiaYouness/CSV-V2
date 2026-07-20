@@ -1,0 +1,7 @@
+{
+  "name": "Concilio Reconciliation",
+  "description": "Rapprochement réglementaire automatisé et intelligent des rapports Pilier 3 de l'EBA.",
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

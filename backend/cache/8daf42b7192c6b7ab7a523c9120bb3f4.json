@@ -1,0 +1,66 @@
+{
+  "parser_version": "v29",
+  "status": "complete",
+  "metric_count": 10,
+  "metrics": [
+    {
+      "Indicateur": "CET1 Capital",
+      "Valeur PDF (EBA)": 23635000000.0,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Capital",
+      "Valeur PDF (EBA)": 23635000000.0,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "Total Capital",
+      "Valeur PDF (EBA)": 23635000000.0,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "RWA Total",
+      "Valeur PDF (EBA)": 94430000000.0,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "CET1 Ratio",
+      "Valeur PDF (EBA)": 0.2503,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Ratio",
+      "Valeur PDF (EBA)": 0.2503,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "Total Capital Ratio",
+      "Valeur PDF (EBA)": 0.2503,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.19879999999999998,
+      "Source PDF": "page 7 (table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 3.7351,
+      "Source PDF": "page 7 (table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.1897,
+      "Source PDF": "page 7 (table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "969500STN7T9MRUMJ267.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-06-30_20260403100532000.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      6,
+      7
+    ],
+    "ov1_pages": []
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "parser_version": "v19",
+  "status": "complete",
+  "metric_count": 6,
+  "metrics": [
+    {
+      "Indicateur": "CET1 Ratio",
+      "Valeur PDF (EBA)": 0.1636,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Ratio",
+      "Valeur PDF (EBA)": 0.1636,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Total Capital Ratio",
+      "Valeur PDF (EBA)": 0.1917,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.0225,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.4344,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.1137000000000001,
+      "Source PDF": "page 3 (table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "FR9695005MSX1OYEMGDF.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2026-03-31_20260520100000002.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      3,
+      5,
+      9,
+      10,
+      11,
+      19
+    ],
+    "ov1_pages": [
+      5,
+      6,
+      19
+    ]
+  }
+}

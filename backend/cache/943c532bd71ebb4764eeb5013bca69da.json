@@ -1,0 +1,91 @@
+{
+  "parser_version": "v19",
+  "status": "complete",
+  "metric_count": 13,
+  "metrics": [
+    {
+      "Indicateur": "CET1 Capital",
+      "Valeur PDF (EBA)": 52714000000.0,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Capital",
+      "Valeur PDF (EBA)": 63650000000.0,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Total Capital",
+      "Valeur PDF (EBA)": 73745000000.0,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "RWA Total",
+      "Valeur PDF (EBA)": 397218000000.0,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "CET1 Ratio",
+      "Valeur PDF (EBA)": 0.13269999999999998,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Ratio",
+      "Valeur PDF (EBA)": 0.1602,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Total Capital Ratio",
+      "Valeur PDF (EBA)": 0.1857,
+      "Source PDF": "page 3 (table)"
+    },
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.0432,
+      "Source PDF": "page 4 (table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.4709,
+      "Source PDF": "page 4 (table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.1703000000000001,
+      "Source PDF": "page 4 (table)"
+    },
+    {
+      "Indicateur": "RWA CCR",
+      "Valeur PDF (EBA)": 20463000000.0,
+      "Source PDF": "page 7 (table)"
+    },
+    {
+      "Indicateur": "RWA Marché",
+      "Valeur PDF (EBA)": 11802000000.0,
+      "Source PDF": "page 7 (table)"
+    },
+    {
+      "Indicateur": "RWA Opérationnel",
+      "Valeur PDF (EBA)": 61796000000.0,
+      "Source PDF": "page 7 (table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "O2RNE8IBXP4R0TD8PU41.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2026-03-31_20260608083647124.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      3,
+      4,
+      5,
+      18,
+      20
+    ],
+    "ov1_pages": [
+      7,
+      8,
+      9,
+      18,
+      19,
+      20
+    ]
+  }
+}
