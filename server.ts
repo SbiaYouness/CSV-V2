@@ -25,7 +25,7 @@ async function startServer() {
   const PORT = 3000;
 
   console.log("Starting Python FastAPI backend...");
-  const pythonProcess = spawn("python3", ["-m", "uvicorn", "app:app", "--host", "127.0.0.1", "--port", "8000"], {
+  const pythonProcess = spawn("python3", ["-m", "uvicorn", "app:app", "--host", "127.0.0.1", "--port", "8500"], {
     cwd: path.join(process.cwd(), "backend"),
     env: { ...process.env, PYTHONUNBUFFERED: "1" }
   });
@@ -60,7 +60,7 @@ async function startServer() {
   // GET /api/files
   app.get("/api/files", async (req, res) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/files");
+      const response = await fetch("http://127.0.0.1:8500/api/files");
       if (!response.ok) {
         throw new Error(`FastAPI response not OK: ${response.status}`);
       }
@@ -75,7 +75,7 @@ async function startServer() {
   // POST /api/reconcile
   app.post("/api/reconcile", express.json({ limit: "50mb" }), async (req, res) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/reconcile", {
+      const response = await fetch("http://127.0.0.1:8500/api/reconcile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -28,8 +28,16 @@ export function UploadWorkspace({ onAnalyze }: Props) {
   useEffect(() => {
     setLoading(true);
     fetch(`${API}/api/files`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error(`Erreur du serveur (Statut ${r.status})`);
+        }
+        return r.json();
+      })
       .then((data: AvailableFiles) => {
+        if (!data || !data.excel_files || !data.by_date) {
+          throw new Error("Format de données invalide reçu du serveur.");
+        }
         setFiles(data);
         // Auto-select first Excel only if there's exactly one (unambiguous)
         if (data.excel_files.length === 1) setSelectedExcel(data.excel_files[0].name);
@@ -38,22 +46,22 @@ export function UploadWorkspace({ onAnalyze }: Props) {
         if (dates.length > 0) setActiveDate(dates[0]);
         setLoading(false);
       })
-      .catch(() => {
-        setError("Impossible de joindre le backend. Vérifiez que le serveur est en cours d'exécution.");
+      .catch((err) => {
+        setError(err.message || "Impossible de joindre le backend. Vérifiez que le serveur est en cours d'exécution.");
         setLoading(false);
       });
   }, []);
 
   const dates = useMemo(() => {
-    if (!files) return [];
+    if (!files || !files.by_date) return [];
     return Object.keys(files.by_date).sort().reverse();
   }, [files]);
 
   // Zips filtered by active date tab
   const dateFilteredZips: ZipFileEntry[] = useMemo(() => {
     if (!files) return [];
-    if (activeDate === 'all') return files.zip_files;
-    return files.by_date[activeDate] ?? [];
+    if (activeDate === 'all') return files.zip_files || [];
+    return (files.by_date && files.by_date[activeDate]) ?? [];
   }, [files, activeDate]);
 
   // Further filtered by search text (matches name or LEI, case-insensitive)
