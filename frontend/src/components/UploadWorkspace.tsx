@@ -41,9 +41,12 @@ export function UploadWorkspace({ onAnalyze }: Props) {
         setFiles(data);
         // Auto-select first Excel only if there's exactly one (unambiguous)
         if (data.excel_files.length === 1) setSelectedExcel(data.excel_files[0].name);
-        // Default active date tab: first date (most recent), but DO NOT auto-check any zips
-        const dates = Object.keys(data.by_date).sort().reverse();
-        if (dates.length > 0) setActiveDate(dates[0]);
+        
+        // Auto-check all available ZIPs by default and display the 'all' tab initially
+        setActiveDate('all');
+        const allZipNames = data.zip_files.map((z: ZipFileEntry) => z.name);
+        setCheckedZips(new Set(allZipNames));
+        
         setLoading(false);
       })
       .catch((err) => {

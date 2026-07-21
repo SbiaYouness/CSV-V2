@@ -1,7 +1,7 @@
 {
   "parser_version": "v30",
   "status": "complete",
-  "metric_count": 13,
+  "metric_count": 12,
   "metrics": [
     {
       "Indicateur": "CET1 Capital",
@@ -29,18 +29,13 @@
       "Source PDF": "page 25 (table)"
     },
     {
-      "Indicateur": "Tier 1 Ratio",
-      "Valeur PDF (EBA)": 0.349,
-      "Source PDF": "page 25 (table)"
-    },
-    {
       "Indicateur": "Total Capital Ratio",
       "Valeur PDF (EBA)": 0.349,
       "Source PDF": "page 25 (table)"
     },
     {
       "Indicateur": "Leverage Ratio",
-      "Valeur PDF (EBA)": 0.2025,
+      "Valeur PDF (EBA)": 0.031,
       "Source PDF": "page 26 (table)"
     },
     {
@@ -55,18 +50,18 @@
     },
     {
       "Indicateur": "RWA Crédit",
-      "Valeur PDF (EBA)": 8516000000.0,
-      "Source PDF": "page 24 (table)"
+      "Valeur PDF (EBA)": 8636000000.0,
+      "Source PDF": "page 8 (table)"
+    },
+    {
+      "Indicateur": "RWA Opérationnel",
+      "Valeur PDF (EBA)": 347000000.0,
+      "Source PDF": "page 8 (table)"
     },
     {
       "Indicateur": "RWA CCR",
       "Valeur PDF (EBA)": 138000000.0,
       "Source PDF": "page 24 (table)"
-    },
-    {
-      "Indicateur": "RWA Opérationnel",
-      "Valeur PDF (EBA)": 347000000.0,
-      "Source PDF": "page 25 (table)"
     }
   ],
   "metadata": {
@@ -75,11 +70,20 @@
     "summary_pages": [
       25,
       26,
+      29,
+      31,
       62
     ],
     "ov1_pages": [
+      6,
+      7,
+      8,
+      9,
       24,
       25,
+      31,
+      32,
+      48,
       62
     ]
   }

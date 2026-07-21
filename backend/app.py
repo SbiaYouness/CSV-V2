@@ -189,6 +189,12 @@ def reconcile(req: ReconcileRequest):
     total_matched = 0
     total_rows = 0
 
+    print("=" * 80)
+    print(f"STARTING RECONCILIATION FOR REPORT DATE: {req.report_date}")
+    print(f"Excel file: {req.excel_file}")
+    print(f"Number of selected ZIP files: {len(selected_zip_names)}")
+    print("=" * 80)
+
     for column_index, col in enumerate(bank_columns):
         output_name = _output_name_for_col(col)
         lei = _lei_for_col(col)
@@ -205,7 +211,13 @@ def reconcile(req: ReconcileRequest):
         bank_id = f"{lei or 'unmapped'}:{column_index}"
         input_metric_values[output_name] = dict(metric_rows)
 
+        print("-" * 60)
+        print(f"BANK [{column_index + 1}/{len(bank_columns)}]: {output_name}")
+        print(f"  - Resolved LEI: {lei or 'NONE'}")
+        print(f"  - Input Metrics in Excel: {input_metric_count}")
+
         if input_metric_count == 0:
+            print(f"  - STATUS: SKIPPED (No input data found in Excel column '{col}')")
             skipped_banks.append({
                 "bank": output_name,
                 "lei": lei,
@@ -216,11 +228,20 @@ def reconcile(req: ReconcileRequest):
         zip_name = select_zip_for_lei(selected_zip_names, lei, req.report_date) if lei else None
         zip_path = PDF_DIR / zip_name if zip_name else None
 
+        if lei:
+            if zip_name:
+                print(f"  - Selected ZIP: {zip_name} (matching date filter: {req.report_date})")
+            else:
+                print(f"  - Selected ZIP: NONE (Could not find any matching ZIP/PDF for LEI {lei} in selected files)")
+        else:
+            print(f"  - Selected ZIP: NONE (Bank has no mapped LEI, cannot match to PDF)")
+
         pdf_metrics: dict[str, dict] = {}
         source_label = "auto-extraction (KM1/OV1 regex)"
 
         if zip_path:
             raw_metrics = extract_bank_metrics(str(zip_path))
+            print(f"  - PDF Parse: Extracted {len(raw_metrics)} metrics from {zip_name}")
             for m in raw_metrics:
                 pdf_metrics[m["Indicateur"]] = m
 
@@ -255,6 +276,15 @@ def reconcile(req: ReconcileRequest):
                 else:
                     status = "OK"
 
+            val_excel_str = f"{result_value:,.2f}" if result_value is not None else "None"
+            val_pdf_str = f"{pdf_value:,.2f}" if pdf_value is not None else "None"
+            if status == "OK":
+                print(f"    [OK] {ind:<20} | Excel: {val_excel_str:<12} | PDF: {val_pdf_str:<12}")
+            elif "ANOMALIE UNITE" in status or "ECART SIGNIFICATIF" in status:
+                print(f"    [WARNING] {ind:<20} | Excel: {val_excel_str:<12} | PDF: {val_pdf_str:<12} | Status: {status}")
+            else:
+                print(f"    [INFO] {ind:<20} | Excel: {val_excel_str:<12} | PDF: {val_pdf_str:<12} | Status: {status}")
+
             ecart = None
             ecart_pct = None
             if result_value is not None and pdf_value is not None:
@@ -281,13 +311,16 @@ def reconcile(req: ReconcileRequest):
                 "Source PDF": source_pdf or source_label,
             })
 
+        bank_score = round(bank_ok / bank_rows * 100, 1) if bank_rows > 0 else 0
+        print(f"  - Result: {bank_ok}/{bank_rows} matched | Compliance Score: {bank_score}%")
+
         bank_results.append({
             "id": bank_id,
             "bank": output_name,
             "lei": lei,
             "matched": bank_ok,
             "total": bank_rows,
-            "score": round(bank_ok / bank_rows * 100, 1) if bank_rows > 0 else 0,
+            "score": bank_score,
             "has_pdf": bool(zip_path),
             "zip_name": zip_name or "",
             "input_metrics": input_metric_count,
