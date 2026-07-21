@@ -4,11 +4,12 @@ import time
 import zipfile
 import shutil
 import io
+import traceback
 from pathlib import Path
 from datetime import datetime
 
 import pandas as pd
-from fastapi import FastAPI, UploadFile, File, Body
+from fastapi import FastAPI, UploadFile, File, Body, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
@@ -40,6 +41,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def catch_exceptions_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as exc:
+        print("=" * 80)
+        print(f"ERROR: Exception occurred while handling {request.method} {request.url.path}")
+        traceback.print_exc()
+        print("=" * 80)
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": str(exc),
+                "traceback": traceback.format_exc(),
+                "message": "Internal Server Error in FastAPI backend. Please check the terminal logs."
+            }
+        )
 
 # ─── In-memory summary context store (keyed by result id) ────────────────────
 # Holds the data needed to generate an AI summary on demand. Capped at 50

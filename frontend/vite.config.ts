@@ -5,12 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     cors: {
-      origin: 'http://localhost:8500',   // allow only this origin
+      origin: 'http://localhost:8000',   // allow only this origin
       // methods: ['GET', 'POST'],        // optional, defaults to all methods
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:8500',
+        target: 'http://localhost:8000',
         changeOrigin: true,
       },
     },
