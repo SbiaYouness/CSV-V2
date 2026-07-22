@@ -1340,7 +1340,6 @@ def _extract_missing_metrics_with_vlm(doc, page_numbers: list[int], wanted_metri
     """
     if (
         not wanted_metrics
-        or os.environ.get("EBA_ENABLE_VLM") != "1"
         or os.environ.get("EBA_DISABLE_VLM") == "1"
     ):
         return {}
@@ -1426,7 +1425,7 @@ def _extract_missing_metrics_with_vlm(doc, page_numbers: list[int], wanted_metri
     return results
 
 
-def _extract_bank_metrics_legacy(file_path: str) -> list[dict]:
+def _extract_bank_metrics_legacy(file_path: str, use_vlm: bool = False) -> list[dict]:
     """Extract a compact set of bank metrics from a ZIP or PDF file."""
     # 1. Check Cache
     file_name = file_path.split("/")[-1].split("\\")[-1]
@@ -1610,7 +1609,7 @@ def _extract_bank_metrics_legacy(file_path: str) -> list[dict]:
         })
 
     missing_metrics = [metric_name for metric_name in _METRIC_PATTERNS if metric_name not in seen]
-    if missing_metrics and os.environ.get("EBA_ENABLE_VLM") == "1" and os.environ.get("EBA_DISABLE_VLM") != "1":
+    if missing_metrics and use_vlm and os.environ.get("EBA_DISABLE_VLM") != "1":
         vlm_page_numbers: list[int] = []
         for page_number, *_ in summary_pages + ov1_pages:
             if page_number not in vlm_page_numbers:
@@ -1640,7 +1639,7 @@ def _extract_bank_metrics_legacy(file_path: str) -> list[dict]:
     return metrics
 
 
-def extract_bank_metrics(file_path: str) -> list[dict]:
+def extract_bank_metrics(file_path: str, use_vlm: bool = False) -> list[dict]:
     """Extract bank KM1/OV1 metrics deterministically from a ZIP or PDF file."""
     file_name = file_path.split("/")[-1].split("\\")[-1]
     pdf_bytes = None
@@ -1920,7 +1919,7 @@ def extract_bank_metrics(file_path: str) -> list[dict]:
                         break
 
         missing_metrics = [metric_name for metric_name in _METRIC_ORDER if metric_name not in seen]
-        if missing_metrics and os.environ.get("EBA_ENABLE_VLM") == "1" and os.environ.get("EBA_DISABLE_VLM") != "1":
+        if missing_metrics and use_vlm and os.environ.get("EBA_DISABLE_VLM") != "1":
             vlm_page_numbers: list[int] = []
             for page_number, *_ in summary_pages + ov1_pages:
                 if page_number not in vlm_page_numbers:

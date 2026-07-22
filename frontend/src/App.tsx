@@ -54,7 +54,7 @@ export default function App() {
   }, [history, historyLoaded]);
 
   const handleAnalyze = useCallback(
-    async (excelFile: string, zipFiles: string[], reportDate: string) => {
+    async (excelFile: string, zipFiles: string[], reportDate: string, useAIExtraction: boolean) => {
       let stepIndex = 0;
 
       setAppState({
@@ -84,7 +84,7 @@ export default function App() {
         const response = await fetch(`${API}/api/reconcile`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ excel_file: excelFile, zip_files: zipFiles, report_date: reportDate }),
+          body: JSON.stringify({ excel_file: excelFile, zip_files: zipFiles, report_date: reportDate, use_ai_extraction: useAIExtraction }),
         });
 
         if (!response.ok) {

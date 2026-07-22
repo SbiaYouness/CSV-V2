@@ -79,6 +79,7 @@ class ReconcileRequest(BaseModel):
     excel_file: str          # filename from FichiersClaude/
     zip_files: list[str]     # list of zip filenames from FichiersClaude/pdfs/
     report_date: str = ""    # e.g. "2025-12-31"
+    use_ai_extraction: bool = False
 
 
 class SummaryRequest(BaseModel):
@@ -240,7 +241,7 @@ def reconcile(req: ReconcileRequest):
         source_label = "auto-extraction (KM1/OV1 regex)"
 
         if zip_path:
-            raw_metrics = extract_bank_metrics(str(zip_path))
+            raw_metrics = extract_bank_metrics(str(zip_path), use_vlm=req.use_ai_extraction)
             print(f"  - PDF Parse: Extracted {len(raw_metrics)} metrics from {zip_name}")
             for m in raw_metrics:
                 pdf_metrics[m["Indicateur"]] = m
@@ -477,7 +478,7 @@ async def compare(
         first_column = str(spreadsheet_df.columns[0]).strip().lower() if len(spreadsheet_df.columns) else ""
 
         if first_column in {"métrique", "metrique", "metric"} or first_column not in {"date", "référence", "reference"}:
-            pdf_transactions = await run_in_threadpool(extract_bank_metrics, pdf_path)
+            pdf_transactions = await run_in_threadpool(lambda: extract_bank_metrics(pdf_path, use_vlm=(method == "ai")))
             result = compare_transactions(pdf_transactions, spreadsheet_df, pdf_name=pdf.filename)
         elif method == "ai":
             from services.pdf_parser import extract_transactions_ai
