@@ -79,6 +79,7 @@ class ReconcileRequest(BaseModel):
     excel_file: str          # filename from FichiersClaude/
     zip_files: list[str]     # list of zip filenames from FichiersClaude/pdfs/
     report_date: str = ""    # e.g. "2025-12-31"
+    use_ai_extraction: bool = False
 
 
 class SummaryRequest(BaseModel):
@@ -240,7 +241,7 @@ def reconcile(req: ReconcileRequest):
         source_label = "auto-extraction (KM1/OV1 regex)"
 
         if zip_path:
-            raw_metrics = extract_bank_metrics(str(zip_path))
+            raw_metrics = extract_bank_metrics(str(zip_path), use_vlm=req.use_ai_extraction)
             print(f"  - PDF Parse: Extracted {len(raw_metrics)} metrics from {zip_name}")
             for m in raw_metrics:
                 pdf_metrics[m["Indicateur"]] = m
@@ -254,7 +255,27 @@ def reconcile(req: ReconcileRequest):
             pdf_value = pdf_entry["Valeur PDF (EBA)"] if pdf_entry else None
             source_pdf = pdf_entry["Source PDF"] if pdf_entry else ""
 
-            # Determine status
+            # Determine status & scale normalization
+            effective_pdf = pdf_value
+            if result_value is not None and pdf_value is not None and pdf_value != 0:
+                is_ratio = ind.lower().endswith("ratio") or ind in {"LCR", "NSFR"}
+                candidates = [pdf_value]
+                if is_ratio:
+                    candidates.extend([pdf_value * 100.0, pdf_value / 100.0])
+                else:
+                    candidates.extend([pdf_value * 1_000.0, pdf_value * 1_000_000.0, pdf_value / 1_000.0, pdf_value / 1_000_000.0])
+                
+                best_cand = pdf_value
+                best_diff = abs(result_value - pdf_value)
+                for cand in candidates:
+                    diff = abs(result_value - cand)
+                    if diff < best_diff:
+                        best_diff = diff
+                        best_cand = cand
+                
+                if best_cand != pdf_value and (best_diff < 0.005 or (best_diff / abs(result_value) < 0.02)):
+                    effective_pdf = best_cand
+
             if not zip_path:
                 if relationship and relationship.get("reports_with_parent"):
                     status = f"Données consolidées au niveau parent ({relationship['parent_group']})"
@@ -265,19 +286,19 @@ def reconcile(req: ReconcileRequest):
             elif result_value is None:
                 status = "Absent du fichier resultats"
             else:
-                delta = abs(result_value - pdf_value)
-                ratio = (delta / abs(pdf_value)) if pdf_value not in (None, 0) else 0
-                if delta < 0.0005 or (pdf_value == 0 and result_value == 0):
+                delta = abs(result_value - effective_pdf)
+                ratio = (delta / abs(effective_pdf)) if effective_pdf not in (None, 0) else 0
+                if delta < 0.0005 or (effective_pdf == 0 and result_value == 0):
                     status = "OK"
-                elif abs(result_value * 100 - pdf_value) < max(abs(pdf_value) * 0.05, 1.0):
+                elif ratio <= 0.01:
+                    status = "OK"
+                elif abs(result_value * 100 - effective_pdf) < max(abs(effective_pdf) * 0.05, 1.0):
                     status = "ANOMALIE UNITE PROBABLE (facteur ~100, fichier resultats)"
-                elif ratio > 0.01:
-                    status = "ECART SIGNIFICATIF"
                 else:
-                    status = "OK"
+                    status = "ECART SIGNIFICATIF"
 
             val_excel_str = f"{result_value:,.2f}" if result_value is not None else "None"
-            val_pdf_str = f"{pdf_value:,.2f}" if pdf_value is not None else "None"
+            val_pdf_str = f"{effective_pdf:,.2f}" if effective_pdf is not None else "None"
             if status == "OK":
                 print(f"    [OK] {ind:<20} | Excel: {val_excel_str:<12} | PDF: {val_pdf_str:<12}")
             elif "ANOMALIE UNITE" in status or "ECART SIGNIFICATIF" in status:
@@ -287,9 +308,9 @@ def reconcile(req: ReconcileRequest):
 
             ecart = None
             ecart_pct = None
-            if result_value is not None and pdf_value is not None:
-                ecart = result_value - pdf_value
-                ecart_pct = (ecart / abs(pdf_value) * 100) if pdf_value != 0 else None
+            if result_value is not None and effective_pdf is not None:
+                ecart = result_value - effective_pdf
+                ecart_pct = (ecart / abs(effective_pdf) * 100) if effective_pdf != 0 else None
 
             if status == "OK":
                 bank_ok += 1
@@ -457,7 +478,7 @@ async def compare(
         first_column = str(spreadsheet_df.columns[0]).strip().lower() if len(spreadsheet_df.columns) else ""
 
         if first_column in {"métrique", "metrique", "metric"} or first_column not in {"date", "référence", "reference"}:
-            pdf_transactions = await run_in_threadpool(extract_bank_metrics, pdf_path)
+            pdf_transactions = await run_in_threadpool(lambda: extract_bank_metrics(pdf_path, use_vlm=(method == "ai")))
             result = compare_transactions(pdf_transactions, spreadsheet_df, pdf_name=pdf.filename)
         elif method == "ai":
             from services.pdf_parser import extract_transactions_ai

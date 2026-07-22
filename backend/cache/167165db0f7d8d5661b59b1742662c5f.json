@@ -1,0 +1,95 @@
+{
+  "parser_version": "v30",
+  "status": "complete",
+  "metric_count": 14,
+  "metrics": [
+    {
+      "Indicateur": "RWA Total",
+      "Valeur PDF (EBA)": 6000000.0,
+      "Source PDF": "page 2 (OCR table)"
+    },
+    {
+      "Indicateur": "Total Capital",
+      "Valeur PDF (EBA)": 27800000.0,
+      "Source PDF": "page 4 (table)"
+    },
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.051,
+      "Source PDF": "page 4 (table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.49,
+      "Source PDF": "page 4 (table)"
+    },
+    {
+      "Indicateur": "CET1 Capital",
+      "Valeur PDF (EBA)": 20400000.0,
+      "Source PDF": "page 4 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Capital",
+      "Valeur PDF (EBA)": 23613000000.0,
+      "Source PDF": "page 5 (table)"
+    },
+    {
+      "Indicateur": "CET1 Ratio",
+      "Valeur PDF (EBA)": 0.142,
+      "Source PDF": "page 5 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Ratio",
+      "Valeur PDF (EBA)": 0.165,
+      "Source PDF": "page 5 (table)"
+    },
+    {
+      "Indicateur": "Total Capital Ratio",
+      "Valeur PDF (EBA)": 0.19399999999999998,
+      "Source PDF": "page 5 (table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.38,
+      "Source PDF": "page 5 (table)"
+    },
+    {
+      "Indicateur": "RWA Crédit",
+      "Valeur PDF (EBA)": 8000000.0,
+      "Source PDF": "page 2 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Marché",
+      "Valeur PDF (EBA)": 12000000.0,
+      "Source PDF": "page 2 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Opérationnel",
+      "Valeur PDF (EBA)": 17100000.0,
+      "Source PDF": "page 6 (table)"
+    },
+    {
+      "Indicateur": "RWA CCR",
+      "Valeur PDF (EBA)": 7899000000.0,
+      "Source PDF": "page 6 (table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "BFXS5XCH7N0Y05NIXW11.CON_NL_PILLAR3010000_P3NONREMDISDOCS_2025-09-30_20260128140001888.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      2,
+      4,
+      5,
+      6
+    ],
+    "ov1_pages": [
+      2,
+      3,
+      4,
+      6,
+      7,
+      8
+    ]
+  }
+}

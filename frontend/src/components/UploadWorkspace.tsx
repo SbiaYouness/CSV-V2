@@ -10,7 +10,7 @@ function formatSize(bytes: number) {
 }
 
 interface Props {
-  onAnalyze: (excelFile: string, zipFiles: string[], reportDate: string) => void;
+  onAnalyze: (excelFile: string, zipFiles: string[], reportDate: string, useAIExtraction: boolean) => void;
 }
 
 export function UploadWorkspace({ onAnalyze }: Props) {
@@ -19,10 +19,10 @@ export function UploadWorkspace({ onAnalyze }: Props) {
   const [error, setError] = useState('');
 
   const [selectedExcel, setSelectedExcel] = useState<string>('');
-  // Default: nothing selected — user must actively choose
   const [checkedZips, setCheckedZips] = useState<Set<string>>(new Set());
   const [activeDate, setActiveDate] = useState<string>('all');
   const [search, setSearch] = useState('');
+  const [useAIExtraction, setUseAIExtraction] = useState(false);
 
   // Fetch available files from backend
   useEffect(() => {
@@ -141,7 +141,7 @@ export function UploadWorkspace({ onAnalyze }: Props) {
 
   const handleAnalyze = () => {
     if (!canAnalyze) return;
-    onAnalyze(selectedExcel, Array.from(checkedZips), reportDate);
+    onAnalyze(selectedExcel, Array.from(checkedZips), reportDate, useAIExtraction);
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -417,7 +417,7 @@ export function UploadWorkspace({ onAnalyze }: Props) {
 
       {/* Footer: summary + analyze button */}
       <div className="mt-4 flex items-center justify-between flex-shrink-0 gap-4">
-        <div className="text-xs text-gray-600 min-w-0 flex-1">
+        <div className="text-xs text-gray-600 min-w-0 flex-1 flex items-center gap-4">
           {canAnalyze ? (
             <span>
               <span className="text-gold font-mono-numbers font-semibold">{checkedZips.size}</span>
@@ -429,6 +429,20 @@ export function UploadWorkspace({ onAnalyze }: Props) {
             </span>
           ) : (
             <span className="text-gray-700 italic">{runButtonLabel()}</span>
+          )}
+          
+          {canAnalyze && (
+            <label className="flex items-center gap-2 cursor-pointer group px-3 py-1.5 rounded bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50">
+              <input
+                type="checkbox"
+                className="w-4 h-4 rounded border-gray-600 text-gold focus:ring-gold focus:ring-offset-background bg-slate-900"
+                checked={useAIExtraction}
+                onChange={(e) => setUseAIExtraction(e.target.checked)}
+              />
+              <span className="text-sm font-medium text-gray-300 group-hover:text-gold transition-colors">
+                Activer l'extraction AI (Ollama VL)
+              </span>
+            </label>
           )}
         </div>
         <button

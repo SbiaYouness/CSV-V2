@@ -59,7 +59,7 @@ _BANK_LEI_MAP_RAW: dict[str, str] = {
     "Axa banque":                         "969500FFKE8NKHXUTZ47",
     "BNP Paribas Personal Finance":       "R0MUWSFPU8MPRO8K5P83",  # same group, placeholder
     "Banque populaire Grand Ouest":       "969500JNCCPQSAQO9K33",
-    "BofA Securities Europe":             "R4DHLH5KX7NMDO6YTPM4",
+    "BofA Securities Europe":             "BFXS5XCH7N0Y05NIXW11",
     "CIC":                                "96950066NYMAFZAJFW89",
     "Caisse federale de credit mutuel":   "969500RIQZX7RZNR4Z50",
     "Caisse regionale de credit agr":     "9695001XNQTXW5QYMM16",
