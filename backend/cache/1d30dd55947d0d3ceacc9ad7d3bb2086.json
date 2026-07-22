@@ -1,0 +1,51 @@
+{
+  "parser_version": "v30",
+  "status": "complete",
+  "metric_count": 6,
+  "metrics": [
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.0,
+      "Source PDF": "page 141 (table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.067,
+      "Source PDF": "page 142 (table)"
+    },
+    {
+      "Indicateur": "RWA Crédit",
+      "Valeur PDF (EBA)": 27017000000.0,
+      "Source PDF": "page 69 (table)"
+    },
+    {
+      "Indicateur": "RWA CCR",
+      "Valeur PDF (EBA)": 8000000.0,
+      "Source PDF": "page 69 (table)"
+    },
+    {
+      "Indicateur": "RWA Opérationnel",
+      "Valeur PDF (EBA)": 2487000000.0,
+      "Source PDF": "page 69 (table)"
+    },
+    {
+      "Indicateur": "RWA Total",
+      "Valeur PDF (EBA)": 29522000000.0,
+      "Source PDF": "page 70 (table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "969500W34S6NCZWYBV47.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-12-31_20260427100000002.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      141,
+      142
+    ],
+    "ov1_pages": [
+      68,
+      69,
+      70,
+      72
+    ]
+  }
+}

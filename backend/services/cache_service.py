@@ -5,7 +5,7 @@ from pathlib import Path
 
 # Bump this string whenever extraction logic changes.
 # Any cache entry written with a different version will be ignored.
-PARSER_VERSION = "v30"
+PARSER_VERSION = "31"
 
 CACHE_DIR = Path(__file__).parent.parent / "cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
