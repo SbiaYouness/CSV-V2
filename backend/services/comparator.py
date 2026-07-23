@@ -324,7 +324,7 @@ def compare_transactions(
                         status = "OK"
                     elif is_large_amount and delta_pct is not None and delta_pct < 1.5:
                         status = "OK"
-                    elif abs(result_value * 100 - pdf_value) < max(abs(pdf_value) * 0.05, 1.0):
+                    elif abs(result_value * 100 - pdf_value) < max(abs(pdf_value) * 0.05, 1.0) or abs(result_value - pdf_value * 100) < max(abs(pdf_value * 100) * 0.05, 1.0):
                         status = "ANOMALIE UNITE PROBABLE (facteur ~100)"
                     else:
                         status = "ECART SIGNIFICATIF"

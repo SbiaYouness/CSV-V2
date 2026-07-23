@@ -545,7 +545,7 @@ _ROW_SCHEMAS = {
             "reject": [r"un[-\s]?floored", r"sans application", r"without output", r"sans plancher", r"avant plancher"],
         },
         "Leverage Ratio": {
-            "codes": {"14", "13", "12"},
+            "codes": {"14", "13", "12", "15", "16"},
             "patterns": [r"leverage ratio", r"ratio de levier", r"levier", r"leverage"],
             "reject": [r"exposure", r"exposition", r"requirement", r"exigence"],
         },
@@ -773,11 +773,11 @@ def _normalize_amount_number(raw: str) -> float | None:
 def _amount_multiplier_from_text(text: str) -> float:
     normalized = _normalize_for_match(text)
     compact = normalized.replace(" ", "")
-    if re.search(r"\b(eur|euro|euros|€|en|in).{0,30}(thousand|thousands|milliers|k€|keur)\b", normalized):
+    if re.search(r"\b(eur|euro|euros|en|in).{0,30}(thousand|thousands|milliers|k\s?euros?|k\s?eur)\b", normalized):
         return 1_000.0
-    if "inthousand" in compact or "inethousands" in compact or "enmilliers" in compact:
+    if "inthousand" in compact or "inethousands" in compact or "enmilliers" in compact or "enkeur" in compact:
         return 1_000.0
-    if re.search(r"\b(eur|euro|euros|€|en|in).{0,30}(million|millions|eurm|m€|meur|mio)\b", normalized):
+    if re.search(r"\b(eur|euro|euros|en|in).{0,30}(million|millions|eurm|m\s?euros?|m\s?eur|mio)\b", normalized):
         return 1_000_000.0
     if "ineurm" in compact or "enmillions" in compact or "millionsdeuros" in compact:
         return 1_000_000.0
@@ -805,18 +805,23 @@ def _parse_table_number(raw: str, metric_name: str, amount_multiplier: float = 1
     if raw_value is None:
         return None
 
-    multipliers: list[float] = []
     if abs(raw_value) >= 1_000_000_000:
-        multipliers.append(1.0)
-    for multiplier in (amount_multiplier, 1_000_000.0, 1_000.0, 1.0):
-        if multiplier not in multipliers:
-            multipliers.append(multiplier)
-
-    for multiplier in multipliers:
-        value = raw_value * multiplier
-        if _is_valid_metric_value(metric_name, value):
-            return value
-    return raw_value * amount_multiplier
+        return raw_value
+        
+    value = raw_value * amount_multiplier
+    if _is_valid_metric_value(metric_name, value):
+        return value
+        
+    # If the scaled value is invalid, we might have guessed the wrong unit for this specific table.
+    # Fallback to checking other common multipliers, but prefer the parsed multiplier.
+    for fallback in (1_000_000.0, 1_000.0, 1.0):
+        if fallback == amount_multiplier:
+            continue
+        test_val = raw_value * fallback
+        if _is_valid_metric_value(metric_name, test_val):
+            return test_val
+            
+    return value
 
 
 def _is_valid_metric_value(metric_name: str, value: float | None) -> bool:
@@ -1184,12 +1189,15 @@ def _extract_structured_metrics_from_page(
 
     lines, page_text = _table_lines_for_page(page, use_ocr=use_ocr)
     amount_multiplier = _amount_multiplier_from_text(page_text or page.get_text("text"))
-    found: dict[str, tuple[float, int]] = {}
+    
+    candidates: dict[str, list[tuple[float, int, str]]] = {m: [] for m in wanted}
+    
     for words, width in lines:
         row_code, label, value_words = _split_row_words(words, width, table)
         if not label:
             continue
-        for metric_name in list(wanted - found.keys()):
+            
+        for metric_name in wanted:
             if not _row_matches_metric(metric_name, label, table, row_code=row_code):
                 continue
             value = _extract_first_value_from_line(
@@ -1199,7 +1207,37 @@ def _extract_structured_metrics_from_page(
                 amount_multiplier=amount_multiplier,
             )
             if value is not None:
-                found[metric_name] = (value, page_number)
+                candidates[metric_name].append((value, page_number, row_code))
+
+    found: dict[str, tuple[float, int]] = {}
+    for metric_name, matches in candidates.items():
+        if not matches:
+            continue
+            
+        # If multiple matches, try to resolve using strict row code
+        schema = _ROW_SCHEMAS.get(table, {}).get(metric_name)
+        valid_codes = schema.get("codes", set()) if schema else set()
+        
+        if len(matches) > 1:
+            # Try to filter by exact row code match if codes are defined
+            if valid_codes:
+                strict_matches = [m for m in matches if m[2] in valid_codes]
+                if len(strict_matches) == 1:
+                    found[metric_name] = (strict_matches[0][0], strict_matches[0][1])
+                    continue
+                elif len(strict_matches) > 1:
+                    matches = strict_matches # still ambiguous, but narrowed down
+                    
+            # If all remaining matches have the same value, it's safe
+            first_val = matches[0][0]
+            if all(m[0] == first_val for m in matches):
+                found[metric_name] = (first_val, matches[0][1])
+            else:
+                # Ambiguous values! Fail loud by not extracting it, avoiding silent wrong values.
+                print(f"AMBIGUOUS MATCH for {metric_name} on page {page_number}: {[m[0] for m in matches]}")
+        else:
+            found[metric_name] = (matches[0][0], matches[0][1])
+
     return found
 
 
@@ -1219,9 +1257,21 @@ def _expand_table_pages(
             if page_number in selected or page_number not in by_number:
                 continue
             lines, normalized_lines, normalized_text = by_number[page_number]
-            if _detect_table_kinds(normalized_text) or _table_evidence_score(normalized_text, table) >= 2:
+            
+            # Continuation pages might only have 1 metric remaining (e.g., NSFR on page 2)
+            # or they might have explicit "suite" keywords.
+            is_continuation = (
+                table in _detect_table_kinds(normalized_text)
+                or _table_evidence_score(normalized_text, table) >= 1
+                or "suite" in normalized_text[:500]
+                or "continued" in normalized_text[:500]
+            )
+            
+            if is_continuation:
                 expanded.append((page_number, lines, normalized_lines, normalized_text))
                 selected.add(page_number)
+            else:
+                break
 
     expanded.sort(key=lambda item: item[0])
     return expanded
