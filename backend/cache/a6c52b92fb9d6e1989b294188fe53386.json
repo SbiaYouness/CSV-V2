@@ -1,0 +1,38 @@
+{
+  "parser_version": "34",
+  "status": "complete",
+  "metric_count": 4,
+  "metrics": [
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.0,
+      "Source PDF": "page 118 (table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.0868,
+      "Source PDF": "page 118 (table)"
+    },
+    {
+      "Indicateur": "RWA Crédit",
+      "Valeur PDF (EBA)": 8216000000.0,
+      "Source PDF": "page 169 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Opérationnel",
+      "Valeur PDF (EBA)": 935000000.0,
+      "Source PDF": "page 169 (OCR table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "969500EVOBAGHKZEXA33.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-12-31_20260329100000002.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      118
+    ],
+    "ov1_pages": [
+      168,
+      169
+    ]
+  }
+}
