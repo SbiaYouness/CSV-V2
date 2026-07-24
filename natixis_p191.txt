@@ -1,0 +1,254 @@
+3
+Facteurs de risque, gestion des risques et Pilier III
+Informations au titre du Pilier III de Bâle 3
+191
+NATIXIS
+DOCUMENT D'ENREGISTREMENT UNIVERSEL 2025
+◗Modèle pour les indicateurs clés (EU KM1) 
+(en million d'euros)
+a
+b
+c
+d
+e
+31/12/2025
+30/09/2025
+30/06/2025
+31/03/2025
+31/12/2024
+Fonds propres disponibles (montants)
+1
+Fonds propres de base de catégorie 1 (CET1) 
+12 550
+12 282
+12 158
+12 198
+11 221
+2
+Fonds propres de catégorie 1 
+15 509
+14 440
+14 317
+14 459
+13 538
+3
+Total des fonds propres 
+18 639
+17 574
+17 389
+17 663
+16 475
+Montants d'exposition pondérés
+4
+Montant total d'exposition au risque
+106 813
+104 993
+103 479
+102 152
+103 753
+4a
+Montant total d’exposition au risque pré-plancher
+106 813
+104 993
+103 479
+102 152
+Ratios de fonds propres (en pourcentage du montant d’exposition pondéré)
+5
+Ratio de fonds propres de base de catégorie 1 (%)
+11,75 %
+11,70 %
+11,75 %
+11,94 %
+10,82 %
+5b
+Ratio de fonds propres de base de catégorie 1 par rapport au TREA sans application du plancher (%)
+6
+Ratio de fonds propres de catégorie 1 (%)
+14,52 %
+13,75 %
+13,84 %
+14,15 %
+13,05 %
+6b
+Ratio de fonds propres de catégorie 1 par rapport au TREA sans application du plancher (%)
+7
+Ratio de fonds propres total (%)
+17,45 %
+16,74 %
+16,80 %
+17,29 %
+15,88 %
+7b
+Ratio de fonds propres total par rapport au TREA sans application du plancher (%)
+Exigences de fonds propres supplémentaires pour faire face aux risques autres que le risque de levier excessif (en pourcentage du montant d’exposition pondéré)
+EU 7d
+Exigences de fonds propres supplémentaires pour faire face aux risques autres que le risque de 
+levier excessif (%) 
+2,25 %
+2,25 %
+2,25 %
+2,25 %
+2,25 %
+EU 7e
+dont : à satisfaire avec des fonds propres CET1 (points de pourcentage)
+1,27 %
+1,27 %
+1,27 %
+1,27 %
+1,27 %
+EU 7f
+dont : à satisfaire avec des fonds propres de catégorie 1 (points de pourcentage)
+1,69 %
+1,69 %
+1,69 %
+1,69 %
+1,69 %
+EU 7g
+Exigences totales de fonds propres SREP (%)
+10,25 %
+10,25 %
+10,25 %
+10,25 %
+10,25 %
+Exigence globale de coussin et exigence globale de fonds propres (en pourcentage du montant d’exposition pondéré)
+8
+Coussin de conservation des fonds propres (%)
+2,50 %
+2,50 %
+2,50 %
+2,50 %
+2,50 %
+EU 8a
+Coussin de conservation découlant du risque macroprudentiel ou systémique constaté au niveau 
+d'un État membre (%)
+9
+Coussin de fonds propres contracyclique spécifique à l'établissement (%)
+0,64 %
+0,63 %
+0,63 %
+0,64 %
+0,60 %
+EU 9a
+Coussin pour le risque systémique (%)
+10
+Coussin pour les établissements d'importance systémique mondiale (%)
+EU 10a Coussin pour les autres établissements d'importance systémique (%)
+11
+Exigence globale de coussin (%)
+3,14 %
+3,13 %
+3,13 %
+3,14 %
+3,14 %
+EU 11a Exigences globales de fonds propres (%)
+13,40 %
+13,38 %
+13,38 %
+13,39 %
+13,39 %
+12
+Fonds propres CET1 disponibles après le respect des exigences totales de fonds propres SREP (%)
+5,98 %
+5,93 %
+5,98 %
+6,18 %
+5,05 %
+Ratio de levier
+13
+Mesure de l’exposition totale
+418 559
+419 721
+412 974
+400 295
+403 058
+14
+Ratio de levier (%)
+3,71 %
+3,44 %
+3,47 %
+3,61 %
+3,36 %
+Exigences de fonds propres supplémentaires pour faire face au risque de levier excessif (en pourcentage de la mesure de l’exposition totale)
+EU 14a Exigences de fonds propres supplémentaires pour faire face au risque de levier excessif (%) 
+0,00 %
+0,00 %
+0,00 %
+0,00 %
+0,00 %
+EU 14b dont : à satisfaire avec des fonds propres CET1 (points de pourcentage)
+0,00 %
+0,00 %
+0,00 %
+0,00 %
+0,00 %
+EU 14c Exigences de ratio de levier SREP totales (%)
+3,00 %
+3,00 %
+3,00 %
+3,00 %
+3,00 %
+Exigence de coussin lié au ratio de levier et exigence de ratio de levier globale (en pourcentage de la mesure de l’exposition totale)
+EU 14d Exigence de coussin lié au ratio de levier (%)
+Not applicable Not applicable Not applicable Not applicable Not applicable
+EU 14e Exigence de ratio de levier globale (%)
+3,00 %
+3,00 %
+3,00 %
+3,00 %
+3,00 %
+Ratio de couverture des besoins de liquidité
+15
+Actifs liquides de qualité élevée (HQLA) totaux (valeur pondérée-moyenne)
+76 931
+78 373
+83 037
+81 761
+80 895
+EU 16a Sorties de trésorerie – Valeur pondérée totale 
+130 460
+141 192
+146 924
+155 486
+133 477
+EU 16b Entrées de trésorerie – Valeur pondérée totale 
+62 587
+70 543
+72 890
+81 532
+60 297
+16
+Sorties de trésorerie nettes totales (valeur ajustée)
+67 873
+70 649
+74 034
+73 953
+73 180
+17
+Ratio de couverture des besoins de liquidité (%)
+113,35 %
+110,93 %
+112,16 %
+110,56 %
+110,24 %
+Ratio de financement stable net
+18
+Financement stable disponible total
+202 877
+192 605
+187 760
+188 876
+185 254
+19
+Financement stable requis total
+190 400
+184 240
+177 914
+178 549
+174 304
+20
+Ratio NSFR (%)
+106,55 %
+104,54 %
+105,53 %
+105,78 %
+106,28 %

@@ -59,7 +59,8 @@ _BANK_LEI_MAP_RAW: dict[str, str] = {
     "Axa banque":                         "969500FFKE8NKHXUTZ47",
     "BNP Paribas Personal Finance":       "R0MUWSFPU8MPRO8K5P83",  # same group, placeholder
     "Banque populaire Grand Ouest":       "969500JNCCPQSAQO9K33",
-    "BofA Securities Europe":             "BFXS5XCH7N0Y05NIXW11",
+    "BofA Securities Europe":             "R4DHLH5KX7NMDO6YTPM4",
+    "ABN AMRO Bank N.V.":                 "BFXS5XCH7N0Y05NIXW11",
     "CIC":                                "96950066NYMAFZAJFW89",
     "Caisse federale de credit mutuel":   "969500RIQZX7RZNR4Z50",
     "Caisse regionale de credit agr":     "9695001XNQTXW5QYMM16",
@@ -97,6 +98,7 @@ _OUTPUT_BANK_NAME_MAP_RAW: dict[str, str] = {
     "Banque populaire Grand Ouest":       "Banque populaire Grand Ouest",
     "Banque populaire Rives de Pari":     "Banque populaire Rives de Paris",
     "BofA Securities Europe":             "BofA Securities Europe",
+    "ABN AMRO Bank N.V.":                 "ABN AMRO Bank N.V.",
     "Bpifrance":                          "Bpifrance",
     "CAISSE D EPARGNE ET DE PREVOYA":     "Caisse d'Epargne Grand Est Europe",
     "CIC":                                "CIC",
@@ -159,6 +161,15 @@ def _pick_bank_column(df: pd.DataFrame, pdf_name: str | None = None) -> str | No
 
     if pdf_name:
         pdf_key = _normalize_key(pdf_name)
+        
+        # 1. Try matching by LEI embedded in the filename
+        # pdf_name usually contains the LEI at the beginning.
+        for col in candidate_columns:
+            lei = _lei_for_col(col)
+            if lei and lei.lower() in pdf_key:
+                return col
+
+        # 2. Try matching by name substring
         if "bpce" in pdf_key:
             for col in candidate_columns:
                 if "bpce" in _normalize_key(col):
@@ -167,6 +178,7 @@ def _pick_bank_column(df: pd.DataFrame, pdf_name: str | None = None) -> str | No
             if _normalize_key(col) in pdf_key or pdf_key in _normalize_key(col):
                 return col
 
+    # Fallback: pick the column with the most data
     best_column = None
     best_score = -1
     for col in candidate_columns:
@@ -345,13 +357,14 @@ def compare_transactions(
                 "difference": None if pd.isna(pdf_value) or pd.isna(result_value) else round(abs(result_value - pdf_value), 6),
             })
 
-        total = len(rows) if rows else 1
+        total_comparable = matched + mismatched
+        score = (matched / total_comparable * 100) if total_comparable > 0 else 0.0
         return {
             "matched": matched,
             "mismatched": mismatched,
             "pdf_only": pdf_only,
             "csv_only": csv_only,
-            "score": round((matched / total) * 100, 2),
+            "score": round(score, 2),
             "details": rows,
             "pdf_only_details": [row for row in rows if row["status"] == "pdf_only"],
             "csv_only_details": [row for row in rows if row["status"] == "csv_only"],
@@ -395,9 +408,17 @@ def compare_transactions(
             pdf_value = pdf_row.get("Valeur PDF (EBA)") if pdf_row else None
             source_pdf = pdf_row.get("Source PDF") if pdf_row else ""
 
-            if pdf_row is None or result_value is None:
-                status = "ECART SIGNIFICATIF"
-                mismatched += 1
+            if pdf_row is None and result_value is None:
+                status = "PDF non disponible (pas de LEI)"
+                pdf_value = None
+            elif pdf_row is None:
+                status = "Non trouvé dans le PDF"
+                csv_only += 1
+                pdf_value = None
+            elif result_value is None:
+                status = "Absent du fichier resultats"
+                pdf_only += 1
+                pdf_value = pdf_row.get("Valeur PDF (EBA)") if pdf_row else None
             else:
                 delta = abs(result_value - pdf_value)
                 delta_pct = (delta / abs(pdf_value) * 100) if pdf_value not in (None, 0) else None
@@ -443,13 +464,14 @@ def compare_transactions(
                 "difference": delta,
             })
 
-        total = len(rows) if rows else 1
+        total_comparable = matched + mismatched
+        score = (matched / total_comparable * 100) if total_comparable > 0 else 0.0
         return {
             "matched": matched,
             "mismatched": mismatched,
-            "pdf_only": 0,
-            "csv_only": 0,
-            "score": round((matched / total) * 100, 2),
+            "pdf_only": pdf_only,
+            "csv_only": csv_only,
+            "score": round(score, 2),
             "details": rows,
             "pdf_only_details": [],
             "csv_only_details": [],

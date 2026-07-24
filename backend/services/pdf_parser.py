@@ -8,6 +8,7 @@ import shutil
 import base64
 import json
 import hashlib
+import time
 from collections import defaultdict
 import pytesseract
 import requests
@@ -144,6 +145,18 @@ def _build_ocr_candidate_pages(doc) -> tuple[set[int], dict[int, str]]:
             window_end = min(page_count, page_number + 2)
             candidates.update(range(window_start, window_end + 1))
 
+    try:
+        for lvl, title, page_num in doc.get_toc():
+            title_lower = str(title).lower()
+            if any(kw in title_lower for kw in ["km1", "ov1", "key metrics", "overview of", "indicateurs cl", "vue d'ensemble", "exigences de fonds", "exigences en fonds"]):
+                inspect_page(page_num)
+                inspect_page(page_num + 1)
+    except Exception:
+        pass
+
+    if {"KM1", "OV1"} <= found_tables:
+        return candidates, cached_texts
+
     front_end = min(page_count, OCR_FRONT_WINDOW)
     candidates.update(range(1, front_end + 1))
     for page_number in range(1, front_end + 1):
@@ -174,7 +187,7 @@ def _build_ocr_candidate_pages(doc) -> tuple[set[int], dict[int, str]]:
 def _to_float(raw: str) -> float:
     if not raw:
         return 0.0
-    clean = raw.replace("\u00a0", "").replace(" ", "")
+    clean = raw.replace("\u00a0", "").replace("\u202f", "").replace(" ", "")
     # Standardize comma decimals to period decimals
     if "," in clean and "." in clean:
         if clean.rfind(",") > clean.rfind("."):
@@ -494,6 +507,7 @@ _ROW_SCHEMAS = {
                 r"\btotal\s+capital\b",
                 r"fonds propres totaux",
                 r"fonds propres globaux",
+                r"total des fonds propres",
                 r"total fonds propres prudentiels",
             ],
             "reject": [r"\bratio\b", r"requirement", r"exigence"],
@@ -578,22 +592,22 @@ _ROW_SCHEMAS = {
         "RWA Crédit": {
             "codes": {"1", "2"},
             "patterns": [r"credit risk \(?excluding ccr\)?", r"\bcredit risk\b", r"risque de credit"],
-            "reject": [r"counterparty", r"contrepartie", r"cva", r"valuation", r"settlement", r"securiti", r"market", r"marche", r"operational", r"operationnel"],
+            "reject": [r"counterparty", r"contrepartie", r"cva", r"valuation", r"settlement", r"securiti", r"market", r"marche", r"operational", r"operationnel", r"of which", r"dont\b"],
         },
         "RWA CCR": {
             "codes": {"6", "5"},
             "patterns": [r"counterparty credit risk", r"\bccr\b", r"risque de credit de contrepartie", r"risque de contrepartie"],
-            "reject": [r"cva", r"including", r"y compris", r"excluding", r"hors"],
+            "reject": [r"cva", r"including", r"y compris", r"excluding", r"hors", r"of which", r"dont\b"],
         },
         "RWA Marché": {
             "codes": {"20"},
             "patterns": [r"market risk", r"foreign exchange.*commodit", r"risque de marche", r"position.*change.*matieres"],
-            "reject": [],
+            "reject": [r"of which", r"dont\b"],
         },
         "RWA Opérationnel": {
             "codes": {"24"},
             "patterns": [r"operational risk", r"risque operationnel"],
-            "reject": [],
+            "reject": [r"of which", r"dont\b"],
         },
         "RWA Total": {
             "codes": {"29", "30", "31"},
@@ -675,6 +689,7 @@ def _normalize_number(raw: str, as_percent: bool = False, as_million_eur: bool =
         return None
     clean = (
         raw.replace("\u00a0", "")
+        .replace("\u202f", "")
         .replace(" ", "")
         .replace("%", "")
         .replace("€", "")
@@ -731,6 +746,7 @@ def _normalize_amount_number(raw: str) -> float | None:
 
     clean = (
         raw.replace("\u00a0", " ")
+        .replace("\u202f", " ")
         .replace("€", "")
         .replace("â‚¬", "")
         .replace("$", "")
@@ -1348,7 +1364,7 @@ def _prepare_vlm_image(page, crop: fitz.Rect, dpi: int) -> Image.Image:
     return image
 
 
-def _call_ollama_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int) -> dict:
+def _call_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int) -> dict:
     prompt = (
         "Extract only the requested metric values from this page image. "
         "Return JSON only. "
@@ -1359,25 +1375,62 @@ def _call_ollama_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int)
     )
 
     image = _prepare_vlm_image(page, crop, dpi)
-    response = requests.post(
-        OLLAMA_GENERATE_URL,
-        json={
-            "model": VLM_MODEL,
-            "prompt": prompt,
-            "images": [_image_to_base64_png(image)],
-            "stream": False,
-            "format": "json",
-            "keep_alive": "15m",
-            "options": {
-                "temperature": 0,
-                "num_ctx": VLM_NUM_CTX,
-                "num_predict": VLM_NUM_PREDICT,
-            },
-        },
-        timeout=(10, VLM_TIMEOUT),
-    )
-    response.raise_for_status()
-    payload = json.loads(_strip_json_fences(response.json().get("response", "")))
+    b64_image = _image_to_base64_png(image)
+    
+    start_time = time.time()
+    use_openai = os.environ.get("EBA_USE_OPENAI_VLM") == "1"
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+    
+    try:
+        if use_openai and openai_api_key:
+            response = requests.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {openai_api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "gpt-4o",
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": prompt},
+                                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64_image}"}}
+                            ]
+                        }
+                    ],
+                    "response_format": {"type": "json_object"}
+                },
+                timeout=(10, VLM_TIMEOUT)
+            )
+            response.raise_for_status()
+            payload = json.loads(response.json()["choices"][0]["message"]["content"])
+        else:
+            response = requests.post(
+                OLLAMA_GENERATE_URL,
+                json={
+                    "model": VLM_MODEL,
+                    "prompt": prompt,
+                    "images": [b64_image],
+                    "stream": False,
+                    "format": "json",
+                    "keep_alive": "15m",
+                    "options": {
+                        "temperature": 0,
+                        "num_ctx": VLM_NUM_CTX,
+                        "num_predict": VLM_NUM_PREDICT,
+                    },
+                },
+                timeout=(10, VLM_TIMEOUT),
+            )
+            response.raise_for_status()
+            payload = json.loads(_strip_json_fences(response.json().get("response", "")))
+            
+    finally:
+        elapsed = time.time() - start_time
+        print(f"VLM call for page {page.number} took {elapsed:.2f} seconds.")
+
     return payload if isinstance(payload, dict) else {}
 
 
@@ -1433,7 +1486,7 @@ def _extract_missing_metrics_with_vlm(doc, page_numbers: list[int], wanted_metri
             attempts = [(VLM_RENDER_DPI, crop), (max(50, VLM_RENDER_DPI - 20), crop)]
             for attempt_dpi, attempt_crop in attempts:
                 try:
-                    payload = _call_ollama_vlm(page, request_metrics, attempt_crop, attempt_dpi)
+                    payload = _call_vlm(page, request_metrics, attempt_crop, attempt_dpi)
                 except Exception as exc:
                     print(f"Qwen2.5-VL metric extraction skipped on page {page_number}: {exc}")
                     continue
@@ -1743,7 +1796,20 @@ def extract_bank_metrics(file_path: str, use_vlm: bool = False) -> list[dict]:
 
         ocr_used_pages: set[int] = set()
 
-        for page_number, page in enumerate(doc, start=1):
+        toc_target_pages = set()
+        try:
+            for lvl, title, page_num in doc.get_toc():
+                title_lower = str(title).lower()
+                if any(kw in title_lower for kw in ["km1", "ov1", "key metrics", "overview of", "indicateurs cl", "vue d'ensemble", "exigences de fonds", "exigences en fonds"]):
+                    toc_target_pages.add(page_num)
+                    toc_target_pages.add(page_num + 1)
+        except Exception:
+            pass
+
+        page_sequence = sorted(list(toc_target_pages)) + [p for p in range(1, doc.page_count + 1) if p not in toc_target_pages]
+
+        for page_number in page_sequence:
+            page = doc[page_number - 1]
             native_text = page.get_text("text")
             text = native_text
             
@@ -1969,6 +2035,23 @@ def extract_bank_metrics(file_path: str, use_vlm: bool = False) -> list[dict]:
                         break
 
         missing_metrics = [metric_name for metric_name in _METRIC_ORDER if metric_name not in seen]
+        if missing_metrics and not needs_ocr:
+            for table_name, page_set in (("KM1", summary_pages), ("OV1", ov1_pages)):
+                for page_number, *_ in page_set:
+                    if page_number in ocr_used_pages:
+                        continue
+                    extracted = _extract_structured_metrics_from_page(
+                        doc[page_number - 1],
+                        page_number,
+                        table_name,
+                        set(missing_metrics) - seen,
+                        use_ocr=True,
+                    )
+                    ocr_used_pages.add(page_number)
+                    for metric_name, (value, source_page) in extracted.items():
+                        add_metric(metric_name, value, source_page, " (OCR table fallback)")
+            missing_metrics = [metric_name for metric_name in _METRIC_ORDER if metric_name not in seen]
+
         if missing_metrics and use_vlm and os.environ.get("EBA_DISABLE_VLM") != "1":
             vlm_page_numbers: list[int] = []
             for page_number, *_ in summary_pages + ov1_pages:

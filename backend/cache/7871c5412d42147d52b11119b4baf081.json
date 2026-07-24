@@ -1,0 +1,38 @@
+{
+  "parser_version": "35",
+  "status": "complete",
+  "metric_count": 3,
+  "metrics": [
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.05,
+      "Source PDF": "page 55 (table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.24,
+      "Source PDF": "page 130 (table)"
+    },
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.113,
+      "Source PDF": "page 131 (table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "969500TU5ZMYBIWP0R51.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-12-31_20260415060000002.zip",
+    "needs_ocr": false,
+    "summary_pages": [
+      54,
+      55,
+      56,
+      108,
+      109,
+      110,
+      129,
+      130,
+      131
+    ],
+    "ov1_pages": []
+  }
+}

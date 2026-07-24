@@ -1,0 +1,73 @@
+{
+  "parser_version": "35",
+  "status": "complete",
+  "metric_count": 10,
+  "metrics": [
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.0371,
+      "Source PDF": "page 191 (table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.1335,
+      "Source PDF": "page 191 (table)"
+    },
+    {
+      "Indicateur": "Tier 1 Ratio",
+      "Valeur PDF (EBA)": 0.1452,
+      "Source PDF": "page 191 (table)"
+    },
+    {
+      "Indicateur": "NSFR",
+      "Valeur PDF (EBA)": 1.0655,
+      "Source PDF": "page 191 (table)"
+    },
+    {
+      "Indicateur": "CET1 Ratio",
+      "Valeur PDF (EBA)": 0.1175,
+      "Source PDF": "page 191 (table)"
+    },
+    {
+      "Indicateur": "RWA CCR",
+      "Valeur PDF (EBA)": 634000000.0,
+      "Source PDF": "page 189 (table)"
+    },
+    {
+      "Indicateur": "RWA Crédit",
+      "Valeur PDF (EBA)": 229000000.0,
+      "Source PDF": "page 246 (table)"
+    },
+    {
+      "Indicateur": "RWA Marché",
+      "Valeur PDF (EBA)": 138000000.0,
+      "Source PDF": "page 246"
+    },
+    {
+      "Indicateur": "RWA Opérationnel",
+      "Valeur PDF (EBA)": 147000000.0,
+      "Source PDF": "page 246"
+    },
+    {
+      "Indicateur": "RWA Total",
+      "Valeur PDF (EBA)": 31000000.0,
+      "Source PDF": "page 190"
+    }
+  ],
+  "metadata": {
+    "source_file": "NATIXIS_DEU_FR_2025_18032026.pdf",
+    "needs_ocr": false,
+    "summary_pages": [
+      191,
+      245,
+      246
+    ],
+    "ov1_pages": [
+      189,
+      190,
+      191,
+      245,
+      246
+    ]
+  }
+}
