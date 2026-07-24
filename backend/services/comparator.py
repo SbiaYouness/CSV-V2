@@ -42,13 +42,13 @@ _BANK_LEI_MAP_RAW: dict[str, str] = {
     "Banque populaire Alsace Lorrai":     "969500EVOBAGHKZEXA33",
     "Banque populaire Rives de Pari":     "969500W8SBCXNX1DG443",
     "Bpifrance":                          "969500STN7T9MRUMJ267",
-    "CAISSE D EPARGNE ET DE PREVOYA":     "969500JJWO4PQG0R1C58",
+    "CAISSE D EPARGNE ET DE PREVOYA":     "969500JJWO4PQG0R1C58",  # Aquitaine Poitou-Charentes
     "Caisse d Epargne CEPAC":             "969500TU5ZMYBIWP0R51",
-    # accent variants — all four map to the same LEIs as above via _nk()
-    "Caisse d'epargne et de prevoya":     "969500SJXM8MW32ZVG75",  # Bretagne .1 fallback
-    "Caisse d epargne et de prevoya.1":  "969500SJXM8MW32ZVG75",
-    "Caisse d epargne et de prevoya.2":  "969500W34S6NCZWYBV47",
-    "Caisse d epargne et de prevoya.3":  "969500VR2NA6ANMTXH21",
+    # accent variants
+    "Caisse d épargne et de prévoya":     "NO_LEI_EMPTY_COL",  # Mostly empty column in Excel
+    "Caisse d épargne et de prévoya.1":  "969500SJXM8MW32ZVG75",  # Bretagne
+    "Caisse d épargne et de prévoya.2":  "969500W34S6NCZWYBV47",  # Ile-de-France
+    "Caisse d épargne et de prévoya.3":  "969500VR2NA6ANMTXH21",  # Rhone Alpes
     "Credit Foncier":                     "969500EYG6U339D3TI84",
     "Credit mutuel Arkea":                "96950041VJ1QP0B69503",
     "Natixis":                            "KX1WK48MPD4Y2NCUIZ63",
@@ -74,6 +74,9 @@ _BANK_LEI_MAP: dict[str, str] = {_nk(k): v for k, v in _BANK_LEI_MAP_RAW.items()
 
 def _lei_for_col(col: str) -> str:
     """Return LEI for an Excel column name, accent-insensitive."""
+    if col.strip() in _BANK_LEI_MAP_RAW:
+        return _BANK_LEI_MAP_RAW[col.strip()]
+        
     nk_col = _nk(col)
     if nk_col in _BANK_LEI_MAP:
         return _BANK_LEI_MAP[nk_col]
@@ -100,13 +103,13 @@ _OUTPUT_BANK_NAME_MAP_RAW: dict[str, str] = {
     "BofA Securities Europe":             "BofA Securities Europe",
     "ABN AMRO Bank N.V.":                 "ABN AMRO Bank N.V.",
     "Bpifrance":                          "Bpifrance",
-    "CAISSE D EPARGNE ET DE PREVOYA":     "Caisse d'Epargne Grand Est Europe",
+    "CAISSE D EPARGNE ET DE PREVOYA":     "Caisse d'épargne Aquitaine Poitou-Charentes",
     "CIC":                                "CIC",
     "Caisse d Epargne CEPAC":             "Caisse d'Epargne CEPAC",
-    "Caisse d epargne et de prevoya":     "Caisse d'épargne Aquitaine Poitou Charente",
-    "Caisse d epargne et de prevoya.1":  "Caisse d'épargne Bretagne-Pays de Loire",
-    "Caisse d epargne et de prevoya.2":  "Caisse d'épargne Ile-de-France",
-    "Caisse d epargne et de prevoya.3":  "Caisse d'épargne Rhône Alpes",
+    "Caisse d épargne et de prévoya":     "Caisse d'épargne (Autre/Vide)",
+    "Caisse d épargne et de prévoya.1":  "Caisse d'épargne Bretagne-Pays de Loire",
+    "Caisse d épargne et de prévoya.2":  "Caisse d'épargne Ile-de-France",
+    "Caisse d épargne et de prévoya.3":  "Caisse d'épargne Rhône Alpes",
     "Caisse federale de credit mutu":     "Caisse fédérale de crédit mutuel",
     "Caisse federale de credit mutuel":   "Caisse fédérale de crédit mutuel",
     "Caisse regionale de credit agr.1":  "Caisse régionale de crédit agricole (1)",
@@ -125,6 +128,9 @@ _OUTPUT_BANK_NAME_MAP: dict[str, str] = {_nk(k): v for k, v in _OUTPUT_BANK_NAME
 
 def _output_name_for_col(col: str) -> str:
     """Return the clean output bank name for an Excel column, accent-insensitive."""
+    if col.strip() in _OUTPUT_BANK_NAME_MAP_RAW:
+        return _OUTPUT_BANK_NAME_MAP_RAW[col.strip()]
+
     nk_col = _nk(col)
     if nk_col in _OUTPUT_BANK_NAME_MAP:
         return _OUTPUT_BANK_NAME_MAP[nk_col]

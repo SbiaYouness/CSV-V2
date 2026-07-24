@@ -393,11 +393,18 @@ def reconcile(req: ReconcileRequest):
 
     # ─── Compute stats (no AI call — summary is on-demand via /api/summary) ─
     ok_count = sum(1 for r in all_rows if r["Statut"] == "OK")
-    ecart_count = sum(1 for r in all_rows if r["Statut"] == "ECART SIGNIFICATIF")
-    missing_pdf = sum(1 for r in all_rows if "non disponible" in r["Statut"])
+    ecart_count = sum(1 for r in all_rows if r["Statut"] == "ECART SIGNIFICATIF" or "ANOMALIE" in r["Statut"])
+    missing_pdf = sum(1 for r in all_rows if "non disponible" in r["Statut"] or "Non trouvé" in r["Statut"])
+    
+    comparable_rows = sum(1 for r in all_rows if r["Statut"] in [
+        "OK", 
+        "ECART SIGNIFICATIF", 
+        "ANOMALIE UNITE PROBABLE (facteur ~100)", 
+        "ANOMALIE UNITE PROBABLE (facteur ~100, fichier resultats)"
+    ])
 
     elapsed = round(time.time() - start, 2)
-    score = round(ok_count / total_rows * 100, 2) if total_rows else 0.0
+    score = round(ok_count / comparable_rows * 100, 2) if comparable_rows else 0.0
 
     # Store context so the frontend can request an AI summary later
     result_id = str(uuid.uuid4())

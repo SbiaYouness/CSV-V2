@@ -9,6 +9,7 @@ import base64
 import json
 import hashlib
 import time
+from datetime import datetime
 from collections import defaultdict
 import pytesseract
 import requests
@@ -72,6 +73,9 @@ OLLAMA_GENERATE_URL = os.environ.get("OLLAMA_GENERATE_URL", "http://localhost:11
 VLM_MODEL = os.environ.get("EBA_VLM_MODEL", "qwen2.5vl:3b")
 VLM_TIMEOUT = int(os.environ.get("EBA_VLM_TIMEOUT", "120"))
 VLM_MAX_PAGES = int(os.environ.get("EBA_VLM_MAX_PAGES", "4"))
+VLM_PAGES_PROCESSED = 0
+VLM_MAX_TOTAL_PAGES = int(os.environ.get("VLM_MAX_TOTAL_PAGES", "20"))
+VLM_LOG_FILE = os.path.join(os.path.dirname(__file__), "..", "..", "logs", "vlm_cost.csv")
 
 _TESSERACT_CMD: str | None = None
 
@@ -346,12 +350,16 @@ _METRIC_PATTERNS_EXTRA = {
         r"risques ponderes",
     ],
     "RWA Crédit": [
-        r"credit risk",
         r"credit risk \(excluding ccr\)",
-        r"risque de credit",
-        r"risques de credit",
+        r"risque de credit \(hors ccr\)",
+        r"total credit risk",
+        r"total risque de credit",
     ],
-    "RWA CCR": [r"counterparty credit risk", r"risque de credit de contrepartie", r"risque de contrepartie"],
+    "RWA CCR": [
+        r"counterparty credit risk", 
+        r"risque de credit de contrepartie", 
+        r"risque de contrepartie"
+    ],
     "RWA Marché": [
         r"market risk",
         r"risque de marche",
@@ -630,11 +638,7 @@ def _table_evidence_score(normalized_text: str, table: str) -> int:
     return score
 
 
-def _detect_table_kinds(text: str) -> set[str]:
-    normalized = _normalize_for_match(text)
-    normalized = re.sub(r"\s+", " ", normalized)
-    
-    # Exclude Table of Contents, List of Tables, and Cross-Reference indexes
+def _is_blacklisted_page(normalized_text: str) -> bool:
     blacklist = [
         "liste des tableaux",
         "table de concordance",
@@ -645,7 +649,14 @@ def _detect_table_kinds(text: str) -> set[str]:
         "declaration de la personne responsable",
         "declaration of the responsible person"
     ]
-    if any(phrase in normalized for phrase in blacklist):
+    return any(phrase in normalized_text for phrase in blacklist)
+
+
+def _detect_table_kinds(text: str) -> set[str]:
+    normalized = _normalize_for_match(text)
+    normalized = re.sub(r"\s+", " ", normalized)
+    
+    if _is_blacklisted_page(normalized):
         return set()
 
     kinds: set[str] = set()
@@ -672,10 +683,8 @@ def _detect_table_kinds(text: str) -> set[str]:
             "overview of total risk exposure amounts",
             "overview of risk-weighted exposure amounts",
             "overview of risk weighted exposure amounts",
-            "capital requirement and risk-weighted assets",
-            "capital requirement and risk weighted assets",
             "vue densemble des risques ponderes",
-            "exigences en fonds propres et risques ponderes",
+            "vue densemble des montants dexposition au risque",
         )
     )
     if explicit_ov1 or (ov1_marker and _table_evidence_score(normalized, "OV1") >= 2):
@@ -1274,6 +1283,9 @@ def _expand_table_pages(
                 continue
             lines, normalized_lines, normalized_text = by_number[page_number]
             
+            if _is_blacklisted_page(normalized_text):
+                break
+            
             # Continuation pages might only have 1 metric remaining (e.g., NSFR on page 2)
             # or they might have explicit "suite" keywords.
             is_continuation = (
@@ -1364,7 +1376,24 @@ def _prepare_vlm_image(page, crop: fitz.Rect, dpi: int) -> Image.Image:
     return image
 
 
-def _call_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int) -> dict:
+def _log_vlm_call(entity: str, field: str, prompt_tokens: int, completion_tokens: int):
+    global VLM_PAGES_PROCESSED
+    VLM_PAGES_PROCESSED += 1
+    
+    os.makedirs(os.path.dirname(VLM_LOG_FILE), exist_ok=True)
+    file_exists = os.path.exists(VLM_LOG_FILE)
+    with open(VLM_LOG_FILE, "a", encoding="utf-8") as f:
+        if not file_exists:
+            f.write("timestamp,entity,field,prompt_tokens,completion_tokens\n")
+        ts = datetime.now().isoformat()
+        f.write(f"{ts},{entity},{field},{prompt_tokens},{completion_tokens}\n")
+
+def _call_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int, file_name: str) -> dict:
+    global VLM_PAGES_PROCESSED
+    if VLM_PAGES_PROCESSED >= VLM_MAX_TOTAL_PAGES:
+        print(f"VLM HARD STOP REACHED: Exceeded max pages ({VLM_MAX_TOTAL_PAGES}) per run.")
+        return {}
+
     prompt = (
         "Extract only the requested metric values from this page image. "
         "Return JSON only. "
@@ -1378,6 +1407,19 @@ def _call_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int) -> dic
     b64_image = _image_to_base64_png(image)
     
     start_time = time.time()
+    # Load .env file automatically if present
+    env_path = os.path.join(os.path.dirname(__file__), "..", "..", ".env")
+    if os.path.exists(env_path):
+        try:
+            with open(env_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        os.environ.setdefault(k.strip(), v.strip().strip("'\""))
+        except Exception:
+            pass
+
     use_openai = os.environ.get("EBA_USE_OPENAI_VLM") == "1"
     openai_api_key = os.environ.get("OPENAI_API_KEY")
     
@@ -1405,7 +1447,15 @@ def _call_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int) -> dic
                 timeout=(10, VLM_TIMEOUT)
             )
             response.raise_for_status()
-            payload = json.loads(response.json()["choices"][0]["message"]["content"])
+            response_json = response.json()
+            payload = json.loads(response_json["choices"][0]["message"]["content"])
+            usage = response_json.get("usage", {})
+            _log_vlm_call(
+                entity=file_name,
+                field="|".join(wanted_metrics),
+                prompt_tokens=usage.get("prompt_tokens", 0),
+                completion_tokens=usage.get("completion_tokens", 0)
+            )
         else:
             response = requests.post(
                 OLLAMA_GENERATE_URL,
@@ -1425,7 +1475,8 @@ def _call_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int) -> dic
                 timeout=(10, VLM_TIMEOUT),
             )
             response.raise_for_status()
-            payload = json.loads(_strip_json_fences(response.json().get("response", "")))
+            response_json = response.json()
+            payload = json.loads(_strip_json_fences(response_json.get("response", "")))
             
     finally:
         elapsed = time.time() - start_time
@@ -1434,7 +1485,7 @@ def _call_vlm(page, wanted_metrics: list[str], crop: fitz.Rect, dpi: int) -> dic
     return payload if isinstance(payload, dict) else {}
 
 
-def _extract_missing_metrics_with_vlm(doc, page_numbers: list[int], wanted_metrics: list[str]) -> dict[str, tuple[float, int]]:
+def _extract_missing_metrics_with_vlm(doc, page_numbers: list[int], wanted_metrics: list[str], file_name: str) -> dict[str, tuple[float, int]]:
     """
     Use Qwen2.5-VL as a narrow last resort.
 
@@ -1486,7 +1537,7 @@ def _extract_missing_metrics_with_vlm(doc, page_numbers: list[int], wanted_metri
             attempts = [(VLM_RENDER_DPI, crop), (max(50, VLM_RENDER_DPI - 20), crop)]
             for attempt_dpi, attempt_crop in attempts:
                 try:
-                    payload = _call_vlm(page, request_metrics, attempt_crop, attempt_dpi)
+                    payload = _call_vlm(page, request_metrics, attempt_crop, attempt_dpi, file_name)
                 except Exception as exc:
                     print(f"Qwen2.5-VL metric extraction skipped on page {page_number}: {exc}")
                     continue
@@ -1724,7 +1775,7 @@ def _extract_bank_metrics_legacy(file_path: str, use_vlm: bool = False) -> list[
             if page_number not in vlm_page_numbers:
                 vlm_page_numbers.append(page_number)
 
-        vlm_metrics = _extract_missing_metrics_with_vlm(doc, vlm_page_numbers, missing_metrics)
+        vlm_metrics = _extract_missing_metrics_with_vlm(doc, vlm_page_numbers, missing_metrics, file_name)
         for metric_name, (value, page_number) in vlm_metrics.items():
             if metric_name in seen:
                 continue
@@ -1877,7 +1928,7 @@ def extract_bank_metrics(file_path: str, use_vlm: bool = False) -> list[dict]:
 
         summary_pages = _expand_table_pages(summary_pages, pages, "KM1")
         ov1_pages = _expand_table_pages(ov1_pages, pages, "OV1")
-
+        
         wanted_metrics = set(_METRIC_ORDER)
         for table_name, page_set in (("KM1", summary_pages), ("OV1", ov1_pages)):
             for page_number, *_ in page_set:

@@ -1,0 +1,68 @@
+{
+  "parser_version": "36",
+  "status": "complete",
+  "metric_count": 10,
+  "metrics": [
+    {
+      "Indicateur": "Total Capital Ratio",
+      "Valeur PDF (EBA)": 0.1697,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "CET1 Ratio",
+      "Valeur PDF (EBA)": 0.1261,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "Leverage Ratio",
+      "Valeur PDF (EBA)": 0.044800000000000006,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Total",
+      "Valeur PDF (EBA)": 779490000000.0,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "Tier 1 Capital",
+      "Valeur PDF (EBA)": 114882000000.0,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "Tier 1 Ratio",
+      "Valeur PDF (EBA)": 0.1474,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "LCR",
+      "Valeur PDF (EBA)": 1.3453,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "Total Capital",
+      "Valeur PDF (EBA)": 132274000000.0,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "CET1 Capital",
+      "Valeur PDF (EBA)": 98265000000.0,
+      "Source PDF": "page 7 (OCR table)"
+    },
+    {
+      "Indicateur": "RWA Marché",
+      "Valeur PDF (EBA)": 557000000.0,
+      "Source PDF": "page 1 (OCR table)"
+    }
+  ],
+  "metadata": {
+    "source_file": "R0MUWSFPU8MPRO8K5P83.CON_FR_PILLAR3010000_P3NONREMDISDOCS_2025-12-31_20260320220130123.zip",
+    "needs_ocr": true,
+    "summary_pages": [
+      7,
+      8
+    ],
+    "ov1_pages": [
+      1
+    ]
+  }
+}
